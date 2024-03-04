@@ -55,9 +55,8 @@ export default function GameField() {
     
     return (
         <div>
-            <canvas className='GameField' id='GameField' width='1000' height='600'>
+            <canvas className='GameField' id='GameField' width='1000' height='600'></canvas>
             
-            </canvas>
             <button onClick={() => drawPlayer(true, 30)}>spawn 1</button>
             <button onClick={() => drawPlayer(false, 60)}>spawn 2</button>
             <button onClick={() => drawPongBall()}>draw ball</button>

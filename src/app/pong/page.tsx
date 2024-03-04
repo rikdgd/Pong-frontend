@@ -1,4 +1,4 @@
-import GameField from "@/components/PongGame/GameField";
+import GameField from "@/components/pong-game/GameField";
 
 export default function Pong() {
     return (

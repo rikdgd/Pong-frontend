@@ -78,7 +78,7 @@ class PongBall {
      * 
      * This method treats the ball as a square, since it will only be bouncing around in a rectangle shaped playing field.
      * @param point The point that should be checked to be within radius.
-     * @returns Boolean indicating whether or not the point was withing reach of the ball.
+     * @return {boolean} Boolean indicating whether or not the point was withing reach of the ball.
      */
     withinRadius(point: point): boolean {
         const withinWidth = point.x > this.x - this.radius && point.x < this.x + this.radius;
@@ -107,6 +107,11 @@ class PongGameManager {
         this.gameState = this.createNewGameState();
     }
     
+    /**
+     * Creates a new game state with initial ball and player positions.
+     *
+     * @return {pongGameState} the newly created game state
+     */
     createNewGameState(): pongGameState {
         const batWidth = 2;
         const batHeight = 12;

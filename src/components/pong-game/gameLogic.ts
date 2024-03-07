@@ -3,7 +3,7 @@ interface point {
     y: number,
 }
 
-interface playerData {
+export interface playerData {
     id: number,
     x: number,
     y: number,
@@ -11,7 +11,7 @@ interface playerData {
     height: number,
 }
 
-interface ballData {
+export interface ballData {
     x: number,
     y: number,
     xVel: number,
@@ -26,7 +26,7 @@ export interface pongGameState {
     player2: playerData,
 }
 
-enum playerInput {
+export enum playerInput {
     up,
     down,
     none,
@@ -39,10 +39,22 @@ export class PlayerBat {
     height: number;
     
     constructor(x: number, y: number, width: number, height: number) {
-        this.x = x;
-        this.y = y;
         this.width = width;
         this.height = height;
+        
+        const {drawX, drawY} = this.getDrawLocation(x, y);
+        this.x = drawX;
+        this.y = drawY;
+    }
+    
+    private getDrawLocation(xCenter: number, yCenter: number) {
+        const newX = xCenter - (this.width / 2);
+        const newY = yCenter - (this.height / 2);
+        
+        return {
+            drawX: newX,
+            drawY: newY,
+        }
     }
     
     /**
@@ -97,9 +109,17 @@ export class PongGameManager {
     height: number;
     player1Id: number;
     player2Id: number;
+    gameStarted: boolean = false;
     
     gameState: pongGameState;
     
+    /**
+     * Create a new PongGameManager
+     * @param width The width of the playing field
+     * @param height The height of the playing field
+     * @param player1Id The Id of player 1, the current/local player
+     * @param player2Id The Id of player 2
+     */
     constructor(width: number, height: number, player1Id: number, player2Id: number) {
         this.width = width;
         this.height = height;

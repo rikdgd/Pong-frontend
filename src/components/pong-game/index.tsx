@@ -1,29 +1,25 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { PongGameManager } from './gameLogic';
 import GameField from "./GameField";
 
 
 
-interface gameContext {
-    width: number,
-    height: number,
-    player1Id: number,
-    player2Id: number,
-}
-
-
 export default function GameContainer() {
     
     const gameManager = useRef(new PongGameManager(10, 10, 1, 2));
+    const gameEvents = useRef(['game started']);
     
+    useEffect(() => {
+        gameManager.current = new PongGameManager(10, 10, 1, 2);
+    }, []);
     
     const handleKeyDown = (event: any) => {
         switch(event.key) {
             case 'ArrowUp': 
-                console.log('arrow up');
+                gameEvents.current.push('up');
                 break;
             case 'ArrowDown':
-                console.log('arrow down');
+                gameEvents.current.push('down');
                 break;
             default:
                 console.log('not arrown up or down...');
@@ -31,9 +27,8 @@ export default function GameContainer() {
         }
     }
     
-    const startNewGame = (context: gameContext) => {
-        const {width, height, player1Id, player2Id} = context;
-        const newGameManager = new PongGameManager(width, height, player1Id, player2Id);
+    const startNewGame = (width: number, height: number) => {
+        const newGameManager = new PongGameManager(width, height, 0, 1);
         gameManager.current = newGameManager; 
         
         let running = true;
@@ -45,7 +40,7 @@ export default function GameContainer() {
     
     return (
         <div onKeyDown={handleKeyDown} tabIndex={0}>
-            <GameField state={gameManager.current.gameState}/>
+            {gameManager.current ? <GameField state={gameManager.current.gameState}/> : null}
         </div>
     );
 }

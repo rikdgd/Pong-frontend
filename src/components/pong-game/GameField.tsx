@@ -1,10 +1,15 @@
 'use client'
 
+import { useRef } from 'react';
 import './GameField.css';
+import { pongGameState } from './gameLogic';
 
 
 
-export default function GameField() {
+
+
+export default function GameField({state}: {state: pongGameState}) {
+    const {ball, player1, player2} = state;
     
     const drawPongBall = () => {
         const canvas = document.getElementById('GameField') as HTMLCanvasElement;
@@ -38,29 +43,11 @@ export default function GameField() {
         ctx.fill();
     }
     
-    const handleKeyDown = (event: KeyboardEvent) => {
-        switch(event.key) {
-            case 'ArrowUp': 
-                console.log('arrow up');
-                break;
-            case 'ArrowDown':
-                console.log('arrow down');
-                break;
-            default:
-                console.log('not arrown up or down...');
-                break;
-        }
-    }
     
     
     return (
         <div>
             <canvas className='GameField' id='GameField' width='1000' height='600'></canvas>
-            
-            <button onClick={() => drawPlayer(true, 30)}>spawn 1</button>
-            <button onClick={() => drawPlayer(false, 60)}>spawn 2</button>
-            <button onClick={() => drawPongBall()}>draw ball</button>
-            
         </div>
     );
 }

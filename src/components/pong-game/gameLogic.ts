@@ -20,7 +20,7 @@ interface ballData {
 }
 
 
-interface pongGameState {
+export interface pongGameState {
     ball: ballData,
     player1: playerData,
     player2: playerData,
@@ -114,7 +114,7 @@ export class PongGameManager {
      *
      * @return {pongGameState} the newly created game state
      */
-    createNewGameState(): pongGameState {
+    private createNewGameState(): pongGameState {
         const batWidth = 2;
         const batHeight = 12;
         const ballRadius = 3;

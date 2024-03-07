@@ -134,7 +134,7 @@ export class PongGameManager {
      *
      * @return {pongGameState} the newly created game state
      */
-    private createNewGameState(): pongGameState {
+    createNewGameState(): pongGameState {
         const batWidth = 2;
         const batHeight = 12;
         const ballRadius = 3;

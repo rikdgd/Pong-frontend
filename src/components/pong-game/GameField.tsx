@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react';
+import { useEffect } from 'react';
 import './GameField.css';
 import { pongGameState, ballData, playerData } from './gameLogic';
 
@@ -9,8 +9,23 @@ import { pongGameState, ballData, playerData } from './gameLogic';
 
 
 export default function GameField({state}: {state: pongGameState}) {
-    const {ball, player1, player2} = state;
     
+    useEffect(() => {
+        drawGameState(state);
+    }, [state]);
+    
+    
+    const clearCanvas = () => {
+        const canvas = document.getElementById('GameField') as HTMLCanvasElement;
+        const ctx = canvas.getContext('2d');
+        
+        if (!ctx) {
+            alert('Could not find pong canvas!');
+            return;
+        }
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
     
     const drawPongBall = (pongBall: ballData) => {
         const canvas = document.getElementById('GameField') as HTMLCanvasElement;
@@ -42,10 +57,14 @@ export default function GameField({state}: {state: pongGameState}) {
         ctx.fill();
     }
     
-    
-    drawPongBall(ball);
-    drawPlayer(player1);
-    drawPlayer(player2);
+    const drawGameState = (gameState: pongGameState) => {
+        const {ball, player1, player2} = gameState;
+        
+        clearCanvas();
+        drawPongBall(ball);
+        drawPlayer(player1);
+        drawPlayer(player2);
+    }
     
     
     return (

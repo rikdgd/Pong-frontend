@@ -1,9 +1,12 @@
-import GameField from "@/components/pong-game/GameField";
+import GameContainer from "@/components/pong-game";
 
 export default function Pong() {
+    
+    
+    
     return (
         <div>
-            <GameField/>
+            <GameContainer/>
         </div>
     );
 }

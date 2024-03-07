@@ -58,6 +58,8 @@ export default function GameField({state}: {state: pongGameState}) {
     }
     
     const drawGameState = (gameState: pongGameState) => {
+        if (!gameState) return;
+        
         const {ball, player1, player2} = gameState;
         
         clearCanvas();

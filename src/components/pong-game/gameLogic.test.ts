@@ -1,4 +1,5 @@
-const gameLogic = require('./gameLogic');
+import { PongGameManager } from './gameLogic';
+
 
 test('createNewGame', () => {
     const width = 40;
@@ -25,7 +26,7 @@ test('createNewGame', () => {
         y: height / 2,
     }
     
-    const manager = gameLogic.PongGameManager(width, height, 1, 2);
+    const manager = new PongGameManager(width, height, 1, 2);
     const newGameData = manager.createNewGameState();
     
     

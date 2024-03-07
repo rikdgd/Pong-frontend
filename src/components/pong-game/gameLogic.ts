@@ -16,6 +16,7 @@ interface ballData {
     y: number,
     xVel: number,
     yVel: number,
+    radius: number,
 }
 
 
@@ -28,9 +29,10 @@ interface pongGameState {
 enum playerInput {
     up,
     down,
+    none,
 }
 
-class PlayerBat {
+export class PlayerBat {
     x: number;
     y: number;
     width: number;
@@ -57,7 +59,7 @@ class PlayerBat {
     }
 }
 
-class PongBall {
+export class PongBall {
     x: number;
     y: number;
     xVel: number;
@@ -89,7 +91,7 @@ class PongBall {
 }
 
 
-class PongGameManager {
+export class PongGameManager {
     
     width: number;
     height: number;
@@ -115,12 +117,14 @@ class PongGameManager {
     createNewGameState(): pongGameState {
         const batWidth = 2;
         const batHeight = 12;
+        const ballRadius = 3;
         
         const ball: ballData = {
             x: this.width / 2,
             y: this.height / 2,
             xVel: getRandomInt(10),
             yVel: getRandomInt(10),
+            radius: ballRadius,
         }
         const player1: playerData = {
             id: this.player1Id,
@@ -144,17 +148,46 @@ class PongGameManager {
         };
     }
     
-    updateGameState() {
-        let currentBall = this.gameState.ball;
+    updateGameState(player1Input: playerInput, player2Input: playerInput) {
+        let updatedBall = this.gameState.ball;
+        let updatedPlayer1 = this.gameState.player1;
+        let updatedPlayer2 = this.gameState.player2;
         
         const player1Radius = this.gameState.player1.x + this.gameState.player1.width / 2;
         // minus because the ball should hit the left side of the bat for player 2
         const player2Radius = this.gameState.player1.x - this.gameState.player1.width / 2; 
         
-        if (currentBall.x === player1Radius || currentBall.x === player2Radius) {
-            currentBall.xVel = currentBall.xVel * -1;
+        if (updatedBall.x === player1Radius || updatedBall.x === player2Radius) {
+            updatedBall.xVel = updatedBall.xVel * -1;
         }
         
+        if (updatedBall.y >= this.height + updatedBall.radius || updatedBall.y <= 0 + updatedBall.radius) {
+            updatedBall.yVel = updatedBall.yVel * -1;
+        }
+        
+        if (updatedBall.x >= this.width || updatedBall.x <= 0) {
+            // reset the game
+            updatedBall.x = this.width / 2;
+            updatedBall.y = this.height / 2;
+            updatedBall.xVel = getRandomInt(10);
+            updatedBall.yVel = getRandomInt(10);
+            
+        }
+        
+        updatedBall.x += updatedBall.xVel;
+        updatedBall.y += updatedBall.yVel;
+        
+        if (player1Input === playerInput.down) updatedPlayer1.y += 1;
+        if (player1Input === playerInput.up) updatedPlayer1.y -= 1;
+        
+        if (player2Input === playerInput.down) updatedPlayer2.y += 1;
+        if (player2Input === playerInput.up) updatedPlayer2.y -= 1;
+        
+        this.gameState = {
+            ball: updatedBall,
+            player1: this.gameState.player1,
+            player2: this.gameState.player2
+        };
     }
 }
 

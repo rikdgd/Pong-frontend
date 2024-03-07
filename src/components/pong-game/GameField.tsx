@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import './GameField.css';
-import { pongGameState } from './gameLogic';
+import { pongGameState, ballData, playerData } from './gameLogic';
 
 
 
@@ -11,7 +11,8 @@ import { pongGameState } from './gameLogic';
 export default function GameField({state}: {state: pongGameState}) {
     const {ball, player1, player2} = state;
     
-    const drawPongBall = () => {
+    
+    const drawPongBall = (pongBall: ballData) => {
         const canvas = document.getElementById('GameField') as HTMLCanvasElement;
         const ctx = canvas.getContext('2d');
         
@@ -21,16 +22,14 @@ export default function GameField({state}: {state: pongGameState}) {
         }
         
         ctx.beginPath();
-        ctx.arc(canvas.width/2, canvas.height/2, 3, 0, 2 * Math.PI);
+        ctx.arc(pongBall.x, pongBall.y, pongBall.radius, 0, 2 * Math.PI);
         ctx.fillStyle = 'white';
         ctx.fill();
     }
     
-    const drawPlayer = (isPlayer1: boolean, position: number) => {
+    const drawPlayer = (player: playerData) => {
         const canvas = document.getElementById('GameField') as HTMLCanvasElement;
         const ctx = canvas.getContext('2d');
-        
-        const playerXPosition = isPlayer1 ? canvas.width / 8 : canvas.width * 7 / 8;
         
         if (!ctx) {
             alert('Could not find pong canvas!');
@@ -39,10 +38,14 @@ export default function GameField({state}: {state: pongGameState}) {
         
         ctx.beginPath();
         ctx.fillStyle = 'white';
-        ctx.fillRect(playerXPosition, position, 10, 50);
+        ctx.fillRect(player.x, player.y, 10, 50);
         ctx.fill();
     }
     
+    
+    drawPongBall(ball);
+    drawPlayer(player1);
+    drawPlayer(player2);
     
     
     return (

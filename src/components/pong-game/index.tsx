@@ -35,15 +35,18 @@ export default function GameContainer() {
         gameManager.current = newGameManager; 
         
         let running = true;
-        let counter = 1;
         while (running) {
+            const startTime = performance.now();
+            
             gameManager.current.updateGameState(playerInput.none, playerInput.none);
             setGameState(gameManager.current.gameState);
             
-            console.log(`Refreshes thus far: ${counter}`);
-            counter++;
+            const endTime = performance.now();
+            const elapsedTime = endTime - startTime;
             
-            await sleep(200);
+            if (elapsedTime < 1000 / 60) {
+                await sleep(1000 / 60 - elapsedTime);
+            }
         }
     }
     

@@ -11,6 +11,17 @@ import { pongGameState, ballData, playerData } from './gameLogic';
 export default function GameField({state}: {state: pongGameState}) {
     
     useEffect(() => {
+        const drawGameState = (gameState: pongGameState) => {
+            if (!gameState) return;
+            
+            const {ball, player1, player2} = gameState;
+            
+            clearCanvas();
+            drawPongBall(ball);
+            drawPlayer(player1);
+            drawPlayer(player2);
+        }
+        
         drawGameState(state);
     }, [state]);
     
@@ -57,16 +68,6 @@ export default function GameField({state}: {state: pongGameState}) {
         ctx.fill();
     }
     
-    const drawGameState = (gameState: pongGameState) => {
-        if (!gameState) return;
-        
-        const {ball, player1, player2} = gameState;
-        
-        clearCanvas();
-        drawPongBall(ball);
-        drawPlayer(player1);
-        drawPlayer(player2);
-    }
     
     
     return (

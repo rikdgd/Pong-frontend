@@ -105,7 +105,7 @@ export class PongBall {
 
 export class PongGameManager {
     
-    maxRandomVelocity: number = 2;
+    maxRandomVelocity: number = 5;
     
     width: number;
     height: number;
@@ -144,8 +144,8 @@ export class PongGameManager {
         const ball: ballData = {
             x: this.width / 2,
             y: this.height / 2,
-            xVel: getRandomInt(this.maxRandomVelocity),
-            yVel: getRandomInt(this.maxRandomVelocity),
+            xVel: getRandomInt(this.maxRandomVelocity * -1, this.maxRandomVelocity),
+            yVel: getRandomInt(this.maxRandomVelocity * -1, this.maxRandomVelocity),
             radius: ballRadius,
         }
         const player1: playerData = {
@@ -191,8 +191,8 @@ export class PongGameManager {
             // reset the game
             updatedBall.x = this.width / 2;
             updatedBall.y = this.height / 2;
-            updatedBall.xVel = getRandomInt(this.maxRandomVelocity);
-            updatedBall.yVel = getRandomInt(this.maxRandomVelocity);
+            updatedBall.xVel = getRandomInt(this.maxRandomVelocity * -1, this.maxRandomVelocity);
+            updatedBall.yVel = getRandomInt(this.maxRandomVelocity * -1, this.maxRandomVelocity);
             
         }
         
@@ -213,6 +213,6 @@ export class PongGameManager {
     }
 }
 
-function getRandomInt(max: number) {
-    return Math.floor(Math.random() * max);
+function getRandomInt(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }

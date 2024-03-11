@@ -8,7 +8,7 @@ import GameField from "./GameField";
 
 export default function GameContainer() {
     
-    const gameManager = useRef(new PongGameManager(600, 300, 1, 2));
+    const gameManager = useRef(new PongGameManager(1000, 600, 1, 2));
     const [gameState, setGameState] = useState(gameManager.current.createNewGameState());
     const gameEvents = useRef(['game started']);
     
@@ -63,7 +63,7 @@ export default function GameContainer() {
                 {gameManager.current ? <GameField state={gameManager.current.gameState}/> : null}
                 
             </div>
-            <button onClick={async () => {startNewGame(600, 300)}}>start</button>
+            <button onClick={async () => {startNewGame(1000, 600)}}>start</button>
         </div>
     );
 }

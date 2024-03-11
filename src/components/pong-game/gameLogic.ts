@@ -105,13 +105,14 @@ export class PongBall {
 
 export class PongGameManager {
     
-    maxRandomVelocity: number = 5;
+    maxRandomVelocity: number = 3;
     
     width: number;
     height: number;
     player1Id: number;
     player2Id: number;
     gameStarted: boolean = false;
+    private playerSpeed = 10;
     
     gameState: pongGameState;
     
@@ -199,11 +200,11 @@ export class PongGameManager {
         updatedBall.x += updatedBall.xVel;
         updatedBall.y += updatedBall.yVel;
         
-        if (player1Input === playerInput.down) updatedPlayer1.y += 1;
-        if (player1Input === playerInput.up) updatedPlayer1.y -= 1;
+        if (player1Input === playerInput.down) updatedPlayer1.y += this.playerSpeed;
+        if (player1Input === playerInput.up) updatedPlayer1.y -= this.playerSpeed;
         
-        if (player2Input === playerInput.down) updatedPlayer2.y += 1;
-        if (player2Input === playerInput.up) updatedPlayer2.y -= 1;
+        if (player2Input === playerInput.down) updatedPlayer2.y += this.playerSpeed;
+        if (player2Input === playerInput.up) updatedPlayer2.y -= this.playerSpeed;
         
         this.gameState = {
             ball: updatedBall,

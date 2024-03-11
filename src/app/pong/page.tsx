@@ -6,7 +6,7 @@ export default function Pong() {
     
     return (
         <div>
-            <GameContainer/>
+            <GameContainer size={{width: 1000, height: 600}}/>
         </div>
     );
 }

@@ -1,20 +1,23 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import { PongGameManager, playerInput } from './gameLogic';
 import GameField from "./GameField";
 
 
 
-export default function GameContainer() {
+interface size {
+    width: number,
+    height: number
+}
+
+export default function GameContainer({size} : {size: size}) {
     
-    const gameManager = useRef(new PongGameManager(1000, 600, 1, 2));
+    const gameManager = useRef(new PongGameManager(size.width, size.height, 1, 2));
     const [gameState, setGameState] = useState(gameManager.current.createNewGameState());
     const gameEvents = useRef(['game started']);
+    const frameTimeMillis = Math.round(1000 / 60);
     
-    // useEffect(() => {
-    //     gameManager.current = new PongGameManager(10, 10, 1, 2);
-    // }, []);
     
     const handleKeyDown = (event: any) => {
         switch(event.key) {
@@ -25,7 +28,7 @@ export default function GameContainer() {
                 gameEvents.current.push('down');
                 break;
             default:
-                console.log('not arrown up or down...');
+                gameEvents.current.push('none');
                 break;
         }
     }
@@ -38,14 +41,34 @@ export default function GameContainer() {
         while (running) {
             const startTime = performance.now();
             
-            gameManager.current.updateGameState(playerInput.none, playerInput.none);
+            let nextPlayerInput: playerInput = playerInput.none;
+            gameEvents.current.forEach((event) => {
+                
+                switch (event) {
+                    case 'up':
+                        nextPlayerInput = playerInput.up;
+                        break;
+                    case 'down':
+                        nextPlayerInput = playerInput.down;
+                        break;
+                    case 'none':
+                        nextPlayerInput = playerInput.none;
+                        break;
+                    default:
+                        nextPlayerInput = playerInput.none;
+                        break;
+                }
+            });
+            gameEvents.current = [];
+            
+            gameManager.current.updateGameState(nextPlayerInput, playerInput.none);
             setGameState(gameManager.current.gameState);
             
             const endTime = performance.now();
             const elapsedTime = endTime - startTime;
             
-            if (elapsedTime < 1000 / 60) {
-                await sleep(1000 / 60 - elapsedTime);
+            if (elapsedTime < frameTimeMillis) {
+                await sleep(frameTimeMillis - elapsedTime);
             }
         }
     }
@@ -60,10 +83,10 @@ export default function GameContainer() {
     return (
         <div>
             <div onKeyDown={handleKeyDown} tabIndex={0}>
-                {gameManager.current ? <GameField state={gameManager.current.gameState}/> : null}
+                {gameManager.current ? <GameField state={gameState} size={{width: size.width, height: size.height}}/> : null}
                 
             </div>
-            <button onClick={async () => {startNewGame(1000, 600)}}>start</button>
+            <button onClick={async () => {startNewGame(size.width, size.height)}}>start</button>
         </div>
     );
 }

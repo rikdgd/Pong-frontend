@@ -6,9 +6,13 @@ import { pongGameState, ballData, playerData } from './gameLogic';
 
 
 
+interface size {
+    width: number,
+    height: number
+}
 
 
-export default function GameField({state}: {state: pongGameState}) {
+export default function GameField({state, size}: {state: pongGameState, size: size}) {
     
     useEffect(() => {
         const drawGameState = (gameState: pongGameState) => {
@@ -72,7 +76,7 @@ export default function GameField({state}: {state: pongGameState}) {
     
     return (
         <div>
-            <canvas className='GameField' id='GameField' width='1000' height='600'></canvas>
+            <canvas className='GameField' id='GameField' width={size.width} height={size.height}></canvas>
         </div>
     );
 }

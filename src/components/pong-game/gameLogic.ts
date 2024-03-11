@@ -171,46 +171,63 @@ export class PongGameManager {
         };
     }
     
-    updateGameState(player1Input: playerInput, player2Input: playerInput) {
-        let updatedBall = this.gameState.ball;
-        let updatedPlayer1 = this.gameState.player1;
-        let updatedPlayer2 = this.gameState.player2;
+    updatePlayerState(player1Input: playerInput[], player2Input: playerInput[]) {
+        player1Input.forEach(input => {
+            if (input === playerInput.down) this.gameState.player1.y += this.playerSpeed;
+            if (input === playerInput.up) this.gameState.player1.y -= this.playerSpeed;
+        });
+        
+        player2Input.forEach(input => {
+            if (input === playerInput.down) this.gameState.player2.y += this.playerSpeed;
+            if (input === playerInput.up) this.gameState.player2.y -= this.playerSpeed;
+        });
+        
+        this.gameState = {
+            ball: this.gameState.ball,
+            player1: this.gameState.player1,
+            player2: this.gameState.player2
+        };
+    }
+    
+    updateBallState() {
+        let ball = this.gameState.ball;
+        
         
         const player1Radius = this.gameState.player1.x + this.gameState.player1.width / 2;
         // minus because the ball should hit the left side of the bat for player 2
         const player2Radius = this.gameState.player1.x - this.gameState.player1.width / 2; 
         
-        if (updatedBall.x === player1Radius || updatedBall.x === player2Radius) {
-            updatedBall.xVel = updatedBall.xVel * -1;
+        // TODO: Fix this player collision logic...
+        if (ball.x === player1Radius || ball.x === player2Radius) {
+            ball.xVel = ball.xVel * -1;
         }
         
-        if (updatedBall.y >= this.height + updatedBall.radius || updatedBall.y <= 0 + updatedBall.radius) {
-            updatedBall.yVel = updatedBall.yVel * -1;
+        if (ball.y >= this.height + ball.radius || ball.y <= 0 + ball.radius) {
+            ball.yVel = ball.yVel * -1;
         }
         
-        if (updatedBall.x >= this.width || updatedBall.x <= 0) {
+        if (ball.x >= this.width || ball.x <= 0) {
             // reset the game
-            updatedBall.x = this.width / 2;
-            updatedBall.y = this.height / 2;
-            updatedBall.xVel = getRandomInt(this.maxRandomVelocity * -1, this.maxRandomVelocity);
-            updatedBall.yVel = getRandomInt(this.maxRandomVelocity * -1, this.maxRandomVelocity);
+            ball.x = this.width / 2;
+            ball.y = this.height / 2;
+            ball.xVel = getRandomInt(this.maxRandomVelocity * -1, this.maxRandomVelocity);
+            ball.yVel = getRandomInt(this.maxRandomVelocity * -1, this.maxRandomVelocity);
             
         }
         
-        updatedBall.x += updatedBall.xVel;
-        updatedBall.y += updatedBall.yVel;
-        
-        if (player1Input === playerInput.down) updatedPlayer1.y += this.playerSpeed;
-        if (player1Input === playerInput.up) updatedPlayer1.y -= this.playerSpeed;
-        
-        if (player2Input === playerInput.down) updatedPlayer2.y += this.playerSpeed;
-        if (player2Input === playerInput.up) updatedPlayer2.y -= this.playerSpeed;
+        ball.x += ball.xVel;
+        ball.y += ball.yVel;
         
         this.gameState = {
-            ball: updatedBall,
+            ball: ball,
             player1: this.gameState.player1,
             player2: this.gameState.player2
         };
+    }
+    
+    updateGameState(player1Input: playerInput[], player2Input: playerInput[]) {
+        this.updatePlayerState(player1Input, player2Input);
+        this.updateBallState();
     }
 }
 

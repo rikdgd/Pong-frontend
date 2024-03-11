@@ -15,20 +15,20 @@ export default function GameContainer({size} : {size: size}) {
     
     const gameManager = useRef(new PongGameManager(size.width, size.height, 1, 2));
     const [gameState, setGameState] = useState(gameManager.current.createNewGameState());
-    const gameEvents = useRef(['game started']);
+    const userInputStore = useRef(['start game']);
     const frameTimeMillis = Math.round(1000 / 60);
     
     
     const handleKeyDown = (event: any) => {
         switch(event.key) {
             case 'ArrowUp': 
-                gameEvents.current.push('up');
+                userInputStore.current.push('up');
                 break;
             case 'ArrowDown':
-                gameEvents.current.push('down');
+                userInputStore.current.push('down');
                 break;
             default:
-                gameEvents.current.push('none');
+                userInputStore.current.push('none');
                 break;
         }
     }
@@ -41,27 +41,28 @@ export default function GameContainer({size} : {size: size}) {
         while (running) {
             const startTime = performance.now();
             
-            let nextPlayerInput: playerInput = playerInput.none;
-            gameEvents.current.forEach((event) => {
+            const parsedUserInput: playerInput[] = [];
+            userInputStore.current.forEach((event) => {
                 
                 switch (event) {
                     case 'up':
-                        nextPlayerInput = playerInput.up;
+                        parsedUserInput.push(playerInput.up);
                         break;
                     case 'down':
-                        nextPlayerInput = playerInput.down;
+                        parsedUserInput.push(playerInput.down);
                         break;
                     case 'none':
-                        nextPlayerInput = playerInput.none;
+                        parsedUserInput.push(playerInput.none);
                         break;
                     default:
-                        nextPlayerInput = playerInput.none;
+                        parsedUserInput.push(playerInput.none);
                         break;
                 }
             });
-            gameEvents.current = [];
+            userInputStore.current = [];
             
-            gameManager.current.updateGameState(nextPlayerInput, playerInput.none);
+            gameManager.current.updatePlayerState(parsedUserInput, []);
+            gameManager.current.updateBallState();
             setGameState(gameManager.current.gameState);
             
             const endTime = performance.now();

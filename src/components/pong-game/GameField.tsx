@@ -68,7 +68,7 @@ export default function GameField({state, size}: {state: pongGameState, size: si
         
         ctx.beginPath();
         ctx.fillStyle = 'white';
-        ctx.fillRect(player.x, player.y, 10, 50);
+        ctx.fillRect(player.x, player.y, player.width, player.height);
         ctx.fill();
     }
     

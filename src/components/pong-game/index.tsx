@@ -14,7 +14,7 @@ interface size {
 export default function GameContainer({size} : {size: size}) {
     
     const gameManager = useRef(new PongGameManager(size.width, size.height, 1, 2));
-    const [gameState, setGameState] = useState(gameManager.current.createNewGameState());
+    const [gameState, setGameState] = useState(gameManager.current.createNewGameState(3, {width: 8, height: 40}));
     const userInputStore = useRef(['start game']);
     const frameTimeMillis = Math.round(1000 / 60);
     
@@ -39,6 +39,7 @@ export default function GameContainer({size} : {size: size}) {
         
         let running = true;
         while (running) {
+            console.log(gameManager.current.gameState);
             const startTime = performance.now();
             
             const parsedUserInput: playerInput[] = [];

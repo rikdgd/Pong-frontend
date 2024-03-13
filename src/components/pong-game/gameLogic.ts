@@ -3,6 +3,11 @@ interface point {
     y: number,
 }
 
+interface size {
+    width: number,
+    height: number,
+}
+
 export interface playerData {
     id: number,
     x: number,
@@ -129,7 +134,7 @@ export class PongGameManager {
         this.player1Id = player1Id;
         this.player2Id = player2Id;
         
-        this.gameState = this.createNewGameState();
+        this.gameState = this.createNewGameState(3, {width: 8, height: 40});
     }
     
     /**
@@ -137,11 +142,7 @@ export class PongGameManager {
      *
      * @return {pongGameState} the newly created game state
      */
-    createNewGameState(): pongGameState {
-        const batWidth = 2;
-        const batHeight = 12;
-        const ballRadius = 3;
-        
+    createNewGameState(ballRadius = 3, playerSize: size): pongGameState {
         const ball: ballData = {
             x: this.width / 2,
             y: this.height / 2,
@@ -149,19 +150,20 @@ export class PongGameManager {
             yVel: getRandomInt(this.maxRandomVelocity * -1, this.maxRandomVelocity),
             radius: ballRadius,
         }
+
         const player1: playerData = {
             id: this.player1Id,
             x: this.width / 6,
-            y: this.height / 2,
-            width: batWidth,
-            height: batHeight,
+            y: this.height / 2 - (playerSize.height / 2),
+            width: playerSize.width,
+            height: playerSize.height,
         }
         const player2: playerData = {
             id: this.player2Id,
             x: this.width / 6 * 5,
-            y: this.height / 2,
-            width: batWidth,
-            height: batHeight,
+            y: this.height / 2 - (playerSize.height / 2),
+            width: playerSize.width,
+            height: playerSize.height,
         }
         
         return {
@@ -169,6 +171,21 @@ export class PongGameManager {
             player1: player1,
             player2: player2
         };
+    }
+    
+    checkCollision(ball: ballData, player: playerData) {
+        const playerLeft = player.x;
+        const playerRight = player.x + player.width;
+        const playerTop = player.y;
+        const playerBottom = player.y + player.height;
+        
+        if (ball.y + ball.radius >= playerTop && ball.y - ball.radius <= playerBottom) {
+            if (ball.x + ball.radius >= playerLeft && ball.x - ball.radius <= playerRight) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     updatePlayerState(player1Input: playerInput[], player2Input: playerInput[]) {
@@ -191,19 +208,20 @@ export class PongGameManager {
     
     updateBallState() {
         let ball = this.gameState.ball;
+        let player1 = this.gameState.player1;
+        let player2 = this.gameState.player2;
+    
+        const collisionPlayer1 = this.checkCollision(ball, player1);
+        const collisionPlayer2 = this.checkCollision(ball, player2); 
         
-        
-        const player1Radius = this.gameState.player1.x + this.gameState.player1.width / 2;
-        // minus because the ball should hit the left side of the bat for player 2
-        const player2Radius = this.gameState.player1.x - this.gameState.player1.width / 2; 
-        
-        // TODO: Fix this player collision logic...
-        if (ball.x === player1Radius || ball.x === player2Radius) {
+        if (collisionPlayer1 || collisionPlayer2) {
             ball.xVel = ball.xVel * -1;
+            // ball.yVel = ball.yVel * -1;
         }
         
-        if (ball.y >= this.height + ball.radius || ball.y <= 0 + ball.radius) {
+        if (ball.y >= this.height || ball.y <= 0) {
             ball.yVel = ball.yVel * -1;
+            
         }
         
         if (ball.x >= this.width || ball.x <= 0) {
@@ -220,8 +238,8 @@ export class PongGameManager {
         
         this.gameState = {
             ball: ball,
-            player1: this.gameState.player1,
-            player2: this.gameState.player2
+            player1: player1,
+            player2: player2
         };
     }
     

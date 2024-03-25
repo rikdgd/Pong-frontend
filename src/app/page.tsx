@@ -14,11 +14,12 @@ export default function Home() {
     
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <h1>Welcome to Pong!</h1>
+        <h1 className="text-5xl">Welcome to Pong!</h1>
         
         <button onClick={async () => SendMessage()}>Send test message</button>
         
         <a href="/pong">to game</a>
+        <a href="/stylepreview">style preview</a>
         </main>
     );
 }

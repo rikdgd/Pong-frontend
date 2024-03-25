@@ -7,7 +7,7 @@ import GameMessenger from "@/utils/GameMessenger";
 export default function Home() {
     
     async function SendMessage() {
-        const messenger = new GameMessenger("localhost:9001");
+        const messenger = new GameMessenger("localhost:8080");
         await messenger.SendTestMessage();
     }
     

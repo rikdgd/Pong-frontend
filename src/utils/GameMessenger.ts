@@ -37,8 +37,15 @@ class GameMessenger {
     }
     
     async SendTestMessage() {
+        const testMessage = `{
+            "request_type": "Command",
+            "action": "do something",
+            "data": "fake data",
+            "sender_id": 103
+          }`;
+        
         await this.waitForSocketConnection(this.ws);
-        this.ws.send("Hello world!");
+        this.ws.send(testMessage);
         console.log("test message was send");
     }
 }

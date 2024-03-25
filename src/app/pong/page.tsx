@@ -5,7 +5,7 @@ export default function Pong() {
     
     
     return (
-        <div>
+        <div className="min-h-screen">
             <GameContainer size={{width: 1000, height: 600}}/>
         </div>
     );
